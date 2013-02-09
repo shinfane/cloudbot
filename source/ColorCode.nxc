@@ -1,0 +1,73 @@
+/*
+
+Reads a 4 bricks wide Lego stack, identifying 4 color changes.
+To be used as a "Lego Key". One can start the code if the right color coded stack is scanned.
+
+*/
+
+#define COLORSENSOR SENSOR_3
+
+task main(){ 
+	
+	int ColorCode[];
+	string Color[];
+	ArrayInit(ColorCode, 0, 4);
+	ArrayInit(Color,"",4);
+	
+	int count=0;
+	int oldcol=0;
+    
+	SetSensorColorFull(IN_3);
+	Wait(300);
+	oldcol=COLORSENSOR;
+	
+	while(count<4){
+		
+		string tmpcol;
+        //SetSensorColorFull(IN_3);
+        Wait(300);
+        ClearScreen();
+ 
+        NumOut(0,0, COLORSENSOR);
+		if (COLORSENSOR!=oldcol) {
+			ColorCode[count]=COLORSENSOR;
+			oldcol=COLORSENSOR;
+			
+			switch (ColorCode[count]) {
+				case 1:
+						tmpcol="Black";
+						break;
+				case 2:
+						tmpcol="Blue";
+						break;
+				case 3:
+						tmpcol="Green";
+						break;
+				case 4:
+						tmpcol="Yellow";
+						break;
+				
+				case 5:
+						tmpcol="Red";
+						break;
+				case 6:
+						tmpcol="White";
+						break;
+				
+						
+			}
+			Color[count]=tmpcol;
+			count=count+1;
+			TextOut(0, LCD_LINE2, "New Color");
+			NumOut(40,LCD_LINE2,NumToStr(oldcol));
+		}		
+		
+    }
+	ClearScreen();
+	
+	for (int i=0; i<4; i++) {
+		TextOut(0,8*i,Color[i]);
+		
+	}
+	Wait(50000);
+}
